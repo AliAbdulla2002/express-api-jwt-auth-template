@@ -7,7 +7,8 @@ const signToken = (req, res) => {
         id: 1,
         username: 'test',
         password: 'test',
-    }
+
+        }
     const token = jwt.sign({ user }, process.env.JWT_SECRET)
     res.json({ token })
 }
@@ -20,12 +21,18 @@ const verifyToken = (req, res) => {
 
 const signUp = async (req, res) => {
     try {
+        console.log("Data from Postman:", req.body)
+
+        if (req.body.password !== req.body.confirmPassword) {
+            return res.status(400).json({ err: 'Passwords do not match.' })
+        }
+        
         const userInDatabase = await User.findOne({
             username: req.body.username
         })
 
         if (userInDatabase) {
-            return res.json({ err: 'Username already taken.' })
+            return res.status(409).json({ err: 'Username already taken.' })
         }
 
         let userData = {}
@@ -42,7 +49,7 @@ const signUp = async (req, res) => {
         res.json({ token })
 
     } catch (err) {
-        res.json({ err: err.message })
+        res.status(500).json({ err: err.message })
     }
 }
 
