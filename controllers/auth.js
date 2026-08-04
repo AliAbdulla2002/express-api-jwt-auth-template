@@ -21,7 +21,7 @@ const verifyToken = (req, res) => {
 
 const signUp = async (req, res) => {
     try {
-        console.log("Data from Postman:", req.body)
+        // console.log("Data from Postman:", req.body)
 
         if (req.body.password !== req.body.confirmPassword) {
             return res.status(400).json({ err: 'Passwords do not match.' })
